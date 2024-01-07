@@ -11,7 +11,7 @@ export default () => {
   const { push } = useRouter();
 
   async function ActionHandler() {
-    const apiUrl = "http://127.0.0.1:8000/login";
+    const apiUrl = "/login";
     const requestData = {
       username: username,
       password: password,

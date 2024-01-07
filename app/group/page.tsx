@@ -16,7 +16,7 @@ export default function Group() {
   const { push } = useRouter();
   const [groups, setGroups] = useState<GroupDTO[]>([]);
   async function getGroups() {
-    const endpoint = "http://127.0.0.1:8000/chat/groups";
+    const endpoint = "/chat/groups";
 
     const list_group = await FetchAPI(endpoint, "GET");
 

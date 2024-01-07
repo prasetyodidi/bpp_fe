@@ -40,34 +40,12 @@ export default function Chat() {
   const [selectedPeriod, setSelectedPeriod] = useState(1);
   const group = GetGroup();
 
-  function handlePeriodChange(value: number) {
+  function changeCurrentPeriod(value: number) {
     console.log("time period change");
     setSelectedPeriod(value);
   }
 
   const url = "ws://broker.emqx.io:8083/mqtt";
-  const x = {
-    clientId: "emqx_test" + Math.random().toString(16).substring(2, 8),
-    // Clean session
-    // clean: true,
-    // connectTimeout: 4000,
-    // Authentication
-    username: "emqx",
-    password: "public",
-    keepalive: 60,
-    // clientId: clientId,
-    protocolId: "MQTT",
-    protocolVersion: 4,
-    clean: true,
-    reconnectPeriod: 1000,
-    connectTimeout: 30 * 1000,
-    will: {
-      topic: "WillMsg",
-      payload: "Connection Closed abnormally..!",
-      qos: 0,
-      retain: false,
-    },
-  };
 
   const options: IClientOptions = {
     clientId: "emqx_test" + Math.random().toString(16).substring(2, 8),
@@ -79,7 +57,7 @@ export default function Chat() {
     clean: true,
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
-  }
+  };
 
   const client = mqtt.connect(url, options);
   client.on("connect", function () {
@@ -116,7 +94,7 @@ export default function Chat() {
   });
 
   async function pushMessage() {
-    const endpoint = "http://127.0.0.1:8000/chat/messages";
+    const endpoint = "/chat/messages";
     const data = {
       groupId: currentGroupId,
       text: text,
@@ -130,7 +108,7 @@ export default function Chat() {
   }
 
   async function loadMessages() {
-    const endpoint = "http://127.0.0.1:8000/chat/groups/" + GetGroupId();
+    const endpoint = "/chat/groups/" + GetGroupId();
     FetchAPI(endpoint, "GET").then((data) => {
       console.log(data);
 
@@ -157,13 +135,21 @@ export default function Chat() {
     }
   }, []);
 
+  function handleTimePeriod() {
+    const endpoint = "/chat/groups/" + group?.id + "/change-time-period";
+    const body = {
+      activePeriodId: selectedPeriod,
+    };
+    FetchAPI(endpoint, "PUT", body).then((data) => console.log(data));
+  }
+
   return (
     <div className="min-h-screen w-screen bg-slate-800">
       <div className="relative max-w-md h-screen mx-auto bg-slate-50 flex flex-col gap-12">
         <header className="absolute top-0 left-0 right-0 z-10 h-14 bg-slate-900 flex flex-row justify-between items-center px-2">
           <div className="flex flex-row gap-4">
-            <h1 className="text-white">{group.name}</h1>
-            <span>{group.code}</span>
+            <h1 className="text-white">{group?.name}</h1>
+            <span>{group?.code}</span>
           </div>
           <Menu onOpenTimePeriod={() => setIsOpenTimePeriod(true)} />
         </header>
@@ -220,7 +206,7 @@ export default function Chat() {
               type="radio"
               value="1week"
               checked={selectedPeriod === 1}
-              onChange={() => handlePeriodChange(1)}
+              onChange={() => changeCurrentPeriod(1)}
             />
             1 Week
           </label>
@@ -230,7 +216,7 @@ export default function Chat() {
               type="radio"
               value="1month"
               checked={selectedPeriod === 2}
-              onChange={() => handlePeriodChange(2)}
+              onChange={() => changeCurrentPeriod(2)}
             />
             1 Month
           </label>
@@ -240,12 +226,14 @@ export default function Chat() {
               type="radio"
               value="6months"
               checked={selectedPeriod === 3}
-              onChange={() => handlePeriodChange(3)}
+              onChange={() => changeCurrentPeriod(3)}
             />
             6 Months
           </label>
         </div>
-        <a href="/login">Perbarui</a>
+        <button onClick={handleTimePeriod} className="text-black">
+          Perbarui
+        </button>
       </Modal>
     </div>
   );

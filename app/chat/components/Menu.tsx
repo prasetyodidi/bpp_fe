@@ -13,6 +13,10 @@ export default function Menu({ onOpenTimePeriod }: { onOpenTimePeriod: any }) {
     push('/')
   }
 
+  function handleProfil() {
+    push('/profil')
+  }
+
   return (
     <div>
       {isOpen ? (
@@ -29,7 +33,7 @@ export default function Menu({ onOpenTimePeriod }: { onOpenTimePeriod: any }) {
           >
             Kapan Hapus
           </span>
-          <span>Pengaturan</span>
+          <span onClick={handleProfil}>Profil</span>
           <span onClick={handleOnLogout} className="hover:cursor-pointer">Logout</span>
         </div>
       ) : (

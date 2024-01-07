@@ -11,7 +11,7 @@ export default () => {
   const [password, setPassword] = useState("");
 
   function ActionHandler() {
-    const apiUrl = "http://127.0.0.1:8000/chat/create-user-and-join-group";
+    const apiUrl = "/chat/create-user-and-join-group";
     const requestData = {
       username: username,
       groupCode: groupCode,

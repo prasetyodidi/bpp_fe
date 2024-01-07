@@ -31,12 +31,11 @@ export async function FetchAPI(
     };
   }
 
-  return fetch(endpoint, info)
+  return fetch(process.env.NEXT_PUBLIC_API_URL + endpoint, info)
     .then((response) => {
-      const result = response.json();
-      console.log("data", result);
-
       if (response.ok) {
+        const result = response.json();
+        console.log("data", result);
         return result;
       }
       throw new Error("Network response was not ok.");
@@ -73,8 +72,11 @@ export function SetGroup(group: Group) {
   Cookies.set("group", jsonGroup);
 }
 
-export function GetGroup(): Group {
-  const group = Cookies.get("group") ?? "";
-  const result: Group = JSON.parse(group);
-  return result;
+export function GetGroup(): Group | null {
+  const group = Cookies.get("group") ?? null;
+  if (group != null) {
+    const result: Group = JSON.parse(group);
+    return result;  
+  }
+  return null
 }
