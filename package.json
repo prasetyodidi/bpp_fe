@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint"
-  },
+  },  
   "dependencies": {
     "js-cookie": "^3.0.5",
     "mqtt": "^5.3.4",
