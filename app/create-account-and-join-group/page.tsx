@@ -1,4 +1,5 @@
 "use client";
+import { FetchAPI } from "@/components/Helper";
 import Modal from "@/components/Modal";
 import { useState } from "react";
 import { HiArrowSmallLeft } from "react-icons/hi2";
@@ -10,41 +11,19 @@ export default () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [password, setPassword] = useState("");
 
-  function ActionHandler() {
+  async function ActionHandler() {
     const apiUrl = "/chat/create-user-and-join-group";
     const requestData = {
       username: username,
       groupCode: groupCode,
     };
 
-    const requestOptions: RequestInit = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    };
-
-    fetch(apiUrl, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-        const result = response.json();
-        console.error("Error body:", result);
-        return result;
-      })
-      .then((data) => {
-        // Handle the response data here
-        const account = data.account;
-        setIsOpenModal(true)
-        setPassword(account.password)
-        console.log("Response:", data);
-      })
-      .catch((error) => {
-        // Handle errors that may occur during the fetch request
-        console.error("Error:", error);
-      });
+    FetchAPI(apiUrl, "POST", requestData).then((data) => {
+      const account = data.account;
+      setIsOpenModal(true);
+      setPassword(account.password);
+      console.log("Response:", data);
+    });
   }
   return (
     <main className="min-h-screen w-full bg-slate-800 text-slate-950">
