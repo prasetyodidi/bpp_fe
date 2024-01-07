@@ -45,15 +45,17 @@ export default function Chat() {
     setSelectedPeriod(value);
   }
 
-  const url = "ws://broker.emqx.io:8083/mqtt";
-
+  const url = "wss://broker.emqx.io:8084/mqtt";
+  // const url = "mqtts://broker.emqx.io:8883";
+  
   const options: IClientOptions = {
     clientId: "emqx_test" + Math.random().toString(16).substring(2, 8),
     username: "emqx",
     password: "public",
     keepalive: 60,
-    protocolId: "MQTT",
-    protocolVersion: 4,
+    // protocol: 'mqtts',
+    // protocolId: "MQTT",
+    // protocolVersion: 4,
     clean: true,
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
