@@ -20,7 +20,7 @@ export default function Menu({ onOpenTimePeriod }: { onOpenTimePeriod: any }) {
   return (
     <div>
       {isOpen ? (
-        <div className="flex flex-col bg-slate-900 absolute top-4 right-4 rounded-md text-white p-4 gap-2 text-sm">
+        <div className="flex flex-col text-slate-900 absolute top-4 right-4 rounded-md bg-slate-100 p-4 gap-2 text-sm">
           <span
             onClick={() => setIsOpen(false)}
             className="hover:cursor-pointer"

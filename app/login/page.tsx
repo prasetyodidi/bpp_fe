@@ -32,7 +32,7 @@ export default () => {
 
   return (
     <main className="min-h-screen w-full bg-slate-800 text-slate-950">
-      <div className="max-w-md h-screen mx-auto bg-slate-50 flex flex-col p-8">
+      <div className="w-full md:max-w-md h-screen mx-auto bg-slate-50 flex flex-col p-8">
         <div className="flex flex-row gap-2 items-center">
           <a href="/">
             <HiArrowSmallLeft className="text-xl" />

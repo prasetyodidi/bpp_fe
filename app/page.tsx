@@ -1,6 +1,6 @@
 export default () => (
   <main className="min-h-screen w-full bg-slate-800 text-slate-950">
-    <div className="max-w-md h-screen mx-auto bg-slate-50 flex flex-col gap-4 p-8">
+    <div className="w-full md:max-w-md h-screen mx-auto bg-slate-50 flex flex-col gap-4 p-8">
       <div className="border-2 rounded-lg flex flex-col p-2 gap-2">
         <h1 className="font-medium text-xl text-center">Register</h1>
         <a

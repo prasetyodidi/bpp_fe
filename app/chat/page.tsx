@@ -3,7 +3,7 @@ import mqtt, { IClientOptions } from "mqtt";
 import Menu from "./components/Menu";
 import MessageX from "./components/MessageX";
 import MessageY from "./components/MessageY";
-import { HiPaperAirplane } from "react-icons/hi2";
+import { HiPaperAirplane, HiChevronLeft } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import {
   FetchAPI,
@@ -13,13 +13,16 @@ import {
   GetTopic,
 } from "@/components/Helper";
 import Modal from "@/components/Modal";
+import { useRouter } from "next/navigation";
 
 export default function Chat() {
+  const { push } = useRouter();
   interface Message {
     key: number;
     username: string;
     text: string;
     avatar: string;
+    createdAt: string;
   }
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -27,6 +30,7 @@ export default function Chat() {
       username: "Ucup",
       text: "Good Afternoon",
       avatar: "https://ui-avatars.com/api/?name=Ucup+Surucup",
+      createdAt: "13:35",
     },
   ]);
   const [text, setText] = useState("");
@@ -47,7 +51,7 @@ export default function Chat() {
 
   const url = "wss://broker.emqx.io:8084/mqtt";
   // const url = "mqtts://broker.emqx.io:8883";
-  
+
   const options: IClientOptions = {
     clientId: "emqx_test" + Math.random().toString(16).substring(2, 8),
     username: "emqx",
@@ -90,6 +94,7 @@ export default function Chat() {
         username: response.username,
         text: response.msg,
         avatar: "https://ui-avatars.com/api/?name=" + response.username,
+        createdAt: response.createdAt
       };
       setMessages([...messages, newMessage]);
     }
@@ -119,6 +124,7 @@ export default function Chat() {
           text: item.message,
           username: item.owner.username,
           avatar: "https://ui-avatars.com/api/?name=" + item.owner.username,
+          createdAt: item.createdAt
         };
       });
       setMessages(x);
@@ -145,12 +151,20 @@ export default function Chat() {
     FetchAPI(endpoint, "PUT", body).then((data) => console.log(data));
   }
 
+  function handleOnBack() {
+    push("/group");
+  }
+
   return (
     <div className="min-h-screen w-screen bg-slate-800">
-      <div className="relative max-w-md h-screen mx-auto bg-slate-50 flex flex-col gap-12">
-        <header className="absolute top-0 left-0 right-0 z-10 h-14 bg-slate-900 flex flex-row justify-between items-center px-2">
-          <div className="flex flex-row gap-4">
-            <h1 className="text-white">{group?.name}</h1>
+      <div className="relative w-full md:max-w-md h-screen mx-auto bg-slate-50 flex flex-col gap-12 text-black">
+        <header className="absolute top-0 left-0 right-0 z-10 h-14 bg-slate-100 flex flex-row justify-between items-center px-2">
+          <div className="flex flex-row gap-4 items-center">
+            <HiChevronLeft
+              className="text-lg font-bold hover:cursor-pointer"
+              onClick={handleOnBack}
+            />
+            <h1 className="font-semibold">{group?.name}</h1>
             <span>{group?.code}</span>
           </div>
           <Menu onOpenTimePeriod={() => setIsOpenTimePeriod(true)} />
@@ -164,6 +178,7 @@ export default function Chat() {
                   text={item.text}
                   username={item.username}
                   avatarUrl={item.avatar}
+                  createdAt={item.createdAt}
                 />
               );
             }
@@ -173,6 +188,7 @@ export default function Chat() {
                 text={item.text}
                 username={item.username}
                 avatarUrl={item.avatar}
+                createdAt={item.createdAt}
               />
             );
           })}
