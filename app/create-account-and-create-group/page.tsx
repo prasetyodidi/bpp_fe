@@ -1,4 +1,5 @@
 "use client";
+import { FetchAPI } from "@/components/Helper";
 import Modal from "@/components/Modal";
 import { useState } from "react";
 import { HiArrowSmallLeft } from "react-icons/hi2";
@@ -17,34 +18,13 @@ export default () => {
       groupName: groupName,
     };
 
-    const requestOptions: RequestInit = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    };
-
-    fetch(apiUrl, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-        const result = response.json()
-        console.log("OK:", result);
-        return result;
-      })
-      .then((data) => {
-        // Handle the response data here
-        const account = data.account;
-        setIsOpenModal(true)
-        setPassword(account.password)
-        console.log("Response:", account);
-      })
-      .catch((error) => {
-        // Handle errors that may occur during the fetch request
-        console.error("Error:", error);
-      });
+    FetchAPI(apiUrl, "POST", requestData).then((data) => {
+      // Handle the response data here
+      const account = data.account;
+      setIsOpenModal(true);
+      setPassword(account.password);
+      console.log("Response:", account);
+    });
   }
 
   return (
@@ -84,9 +64,15 @@ export default () => {
         </div>
       </div>
       <Modal onClose={() => setIsOpenModal(false)} trigger={isOpenModal}>
-        <div className={"font-bold text-slate-950"}>Berikut akun temporary anda</div>
-        <div className={"text-justify text-slate-950"}>username: {username}</div>
-        <div className={"text-justify text-slate-950"}>password: {password}</div>
+        <div className={"font-bold text-slate-950"}>
+          Berikut akun temporary anda
+        </div>
+        <div className={"text-justify text-slate-950"}>
+          username: {username}
+        </div>
+        <div className={"text-justify text-slate-950"}>
+          password: {password}
+        </div>
         <a href="/login">Login</a>
       </Modal>
     </main>
